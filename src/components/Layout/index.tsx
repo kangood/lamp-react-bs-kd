@@ -17,7 +17,7 @@ const menuItemRender = (
 const Layout = () => {
   // 路由插槽，显示页面内容用的
   const outlet = useOutlet();
-
+  // 导航操作
   const nav = useNavigate();
 
   return (
@@ -38,6 +38,7 @@ const Layout = () => {
         size: 'small',
       }}
       title={false}
+      // logo设置
       logo={(
         <img
           src="https://water-drop-resources.oss-cn-chengdu.aliyuncs.com/images/logo-black.png"

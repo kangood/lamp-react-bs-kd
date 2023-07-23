@@ -1,4 +1,5 @@
 import {
+  FlagOutlined,
   HomeOutlined,
 } from '@ant-design/icons';
 
@@ -11,6 +12,7 @@ interface IRoute {
 
 export const ROUTE_KEY = {
   HOME: 'home',
+  PARAMETER: 'parameter',
   PAGE_404: 'p404',
 };
 
@@ -19,6 +21,11 @@ export const ROUTE_CONFIG: Record<string, IRoute> = {
     path: 'home',
     name: '首页',
     icon: <HomeOutlined />,
+  },
+  [ROUTE_KEY.PARAMETER]: {
+    path: 'parameter',
+    name: '参数管理',
+    icon: <FlagOutlined />,
   },
   [ROUTE_KEY.PAGE_404]:
   {
