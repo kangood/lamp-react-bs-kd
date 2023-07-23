@@ -1,10 +1,11 @@
-import { FIND_PARAMETER_LIST } from '@/graphql/parameter';
+import { COMMIT_PARAMETER, FIND_PARAMETER, FIND_PARAMETER_LIST } from '@/graphql/parameter';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constants';
-import { TParametersQuery } from '@/utils/types';
-import { useQuery } from '@apollo/client';
+import { IParameter, TParameterQuery, TParametersQuery } from '@/utils/types';
+import { useMutation, useQuery } from '@apollo/client';
+import { message } from 'antd';
 
 /**
- * 分页+条件查询参数集
+ * 分页+条件查询系统参数集
  */
 export const useParameterList = (pageNum = 1, pageSize = DEFAULT_PAGE_SIZE) => {
   // 请求后端API
@@ -56,4 +57,43 @@ export const useParameterList = (pageNum = 1, pageSize = DEFAULT_PAGE_SIZE) => {
     data: data?.findParameterList.data,
     page: data?.findParameterList.page,
   };
+};
+
+/**
+ * 更新系统参数
+ */
+export const useEditParameterInfo = (): [handleEdit: Function, loading: boolean] => {
+  const [edit, { loading }] = useMutation(COMMIT_PARAMETER);
+
+  const handleEdit = async (
+    id: number,
+    params: IParameter,
+    callback: (isReload: boolean) => void,
+  ) => {
+    const res = await edit({
+      variables: {
+        id,
+        params,
+      },
+    });
+    if (res.data.commitParameterInfo.code === 200) {
+      message.success(res.data.commitParameterInfo.message);
+      callback(true);
+      return;
+    }
+    message.error(res.data.commitParameterInfo.message);
+  };
+
+  return [handleEdit, loading];
+};
+
+export const useParameterInfo = (id?: number) => {
+  const { data, loading, refetch } = useQuery<TParameterQuery>(FIND_PARAMETER, {
+    skip: !id,
+    variables: {
+      id,
+    },
+  });
+
+  return { data: data?.findParameter.data, loading, refetch };
 };
